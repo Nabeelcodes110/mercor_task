@@ -1,5 +1,5 @@
 const Router = require("express").Router();
-const { admin } = require("../../utils/config");
+const { admin } = require("../../utils/adminConfig");
 
 Router.get("/", async (req, res) => {
   admin

@@ -7,17 +7,29 @@
   
   .messages-container {
     height: 650px;
-    overflow-y: auto;
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
   }
   
   .message {
+    border-radius: 5px;
+    display:block;
+    width: 90%;
     background-color: #f2f2f2;
+    font-size: 20px;
     padding: 10px;
     margin-bottom: 10px;
     overflow :inherit;
+    float: left;
+  }
+
+ #a {
+  display: block;
+    background-color: #c9f5cb;
+    color: rgb(18, 17, 17);
+    float: right;
+    
   }
   
   .input-form {

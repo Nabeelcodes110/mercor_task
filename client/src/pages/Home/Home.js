@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./Home.css";
 import { auth, provider } from "../../utils/config";
 import { signInWithPopup } from "firebase/auth";

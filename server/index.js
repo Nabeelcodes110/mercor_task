@@ -1,6 +1,6 @@
 const app = require("express")();
 require("dotenv").config();
-const { admin } = require("./utils/config");
+const { admin } = require("./utils/adminConfig");
 const cors = require("cors");
 
 app.use(cors());

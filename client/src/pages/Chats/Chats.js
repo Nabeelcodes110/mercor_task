@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Chats.css";
 import { useLocation } from "react-router-dom";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "../../utils/config";
+import ReactScrollToBottom from "react-scroll-to-bottom";
 import {
   doc,
-  onSnapshot,
   collection,
   query as queries,
   where,
@@ -17,45 +17,39 @@ import {
 } from "firebase/firestore";
 
 const Chats = () => {
-  const [user] = useAuthState(auth);
+  const [currentUser] = useAuthState(auth);
   const location = useLocation();
   const [inputValue, setInputValue] = useState("");
   const userData = location.state?.user;
-
-  const msgRef = collection(firestore, "Direct Messages");
+  const combinedID =
+    currentUser.uid > userData.uid
+      ? currentUser.uid + userData.uid
+      : userData.uid + currentUser.uid;
   const query = queries(
     collection(firestore, "Direct Messages"),
-    where("sender", "==", user.uid),
-    where("reciever", "==", userData.uid)
+    where("__name__", "==", combinedID)
   );
-  const docRef = doc(firestore, "Direct Messages", user.uid);
+  const docRef = doc(firestore, "Direct Messages", combinedID);
 
-  getDoc(docRef)
-    .then((data) => {
-      if (data.exists()) {
-        // console.log(data);
-      } else {
-        setDoc(doc(firestore, "Direct Messages", user.uid), {
-          sender: user.uid,
-          reciever: userData.uid,
-          messages: [],
-        })
-          .then(() => {
-            console.log("New document created successfully!");
+  useEffect(() => {
+    getDoc(docRef)
+      .then((data) => {
+        if (!data.exists()) {
+          setDoc(doc(firestore, "Direct Messages", combinedID), {
+            messages: [],
           })
-          .catch((error) => {
-            console.error("Error creating new document:");
-          });
-      }
-    })
-    .catch((err) => console.log(err));
+            .then(() => {
+              console.log("New document created successfully!");
+            })
+            .catch((error) => {
+              console.error("Error creating new document:");
+            });
+        }
+      })
+      .catch((err) => console.log(err));
+  });
 
-  // const [msgs] = useCollectionData(query, { idField: "id" });
   const [msgs] = useCollectionData(query);
-
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -65,10 +59,10 @@ const Chats = () => {
         {
           messages: arrayUnion(
             JSON.stringify({
-              sender: user.uid,
+              sender: currentUser.uid,
               reciever: userData.uid,
               text: inputValue,
-              timeStamp: Date.now,
+              timeStamp: new Date(),
               textID: Math.floor(Math.random() * 0xffffff)
                 .toString(16)
                 .padEnd(6, "0"),
@@ -92,20 +86,27 @@ const Chats = () => {
             </div>
           </div>
         </nav>
-        <div className="messages-container">
+        <ReactScrollToBottom className="messages-container">
           {msgs &&
             msgs[0].messages.map((message) => (
-              <div key={message.id} className="message">
-                {message}
+              <div
+                key={JSON.parse(message).id}
+                className="message"
+                id={JSON.parse(message).sender === currentUser.uid ? "a" : "b"}
+              >
+                {JSON.parse(message).text}
+                <p style={{ fontSize: 12, color: "rgb(154, 153, 153)" }}>
+                  {JSON.parse(message).timeStamp.substr(0, 17)}
+                </p>
               </div>
             ))}
-        </div>
+        </ReactScrollToBottom>
         <form onSubmit={handleFormSubmit} className="input-form">
           <input
             type="text"
             placeholder="Type your message"
             value={inputValue}
-            onChange={handleInputChange}
+            onChange={(event) => setInputValue(event.target.value)}
             className="input-field"
           />
           <button type="submit" className="send-button">
