@@ -2,35 +2,32 @@ import React from "react";
 import "./Users.css";
 import Card from "../../components/Card/Cards";
 import { Link } from "react-router-dom";
-import { auth } from "../../utils/config";
+import { auth, firestore } from "../../utils/config";
 import { useAuthState } from "react-firebase-hooks/auth";
-
-import axios from "axios";
-
-let usersData;
-//API call to get All The Available Users
-await axios
-  .get("http://localhost:5000/api/users")
-  .then((response) => {
-    usersData = response.data.payload.users;
-  })
-  .catch((err) => {
-    usersData = [];
-  });
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { doc, collection, query as queries, setDoc } from "firebase/firestore";
 
 const Users = () => {
   const [currentUser] = useAuthState(auth);
+  const query = queries(collection(firestore, "Users"));
+
+  const [usersData] = useCollectionData(query);
 
   return (
     <div className="component-list">
       <h1>Users</h1>
       <ul className="component-list__items">
         {usersData &&
-          usersData.map(
+          usersData?.map(
             (user) =>
               currentUser.uid !== user.uid && (
-                <Link to="/chats" state={{ user }} className="link">
-                  <li key={user.uid} className="component-list__item">
+                <Link
+                  to="/chats"
+                  state={{ user }}
+                  className="link"
+                  key={user.uid}
+                >
+                  <li className="component-list__item">
                     <Card
                       name={user.displayName}
                       profilePhoto={user.photoURL}

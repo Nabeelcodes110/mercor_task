@@ -52,8 +52,8 @@ const Groups = () => {
       <ul className="group-list">
         {groups && groups.length > 0 ? (
           groups.map((group) => (
-            <Link to="/groupchats" state={{ group }}>
-              <li key={group.id} className="group-item">
+            <Link to="/groupchats" state={{ group }} key={group.groupID}>
+              <li className="group-item">
                 <h3>Group Name : {group.groupName}</h3>
                 <h4>description : {group.description}</h4>
               </li>

@@ -1,17 +1,28 @@
 import React from "react";
 import "./Home.css";
-import { auth, provider } from "../../utils/config";
+import { auth, provider, firestore } from "../../utils/config";
 import { signInWithPopup } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
+import { doc, collection, setDoc } from "firebase/firestore";
 
 const Home = () => {
   const [user] = useAuthState(auth);
+  const collectionRef = collection(firestore, "Users");
 
   //signIn / Login
   const handleLogin = () => {
     signInWithPopup(auth, provider).then((data) => {
-      console.log("SignedIn");
+      setDoc(doc(collectionRef, data.user.uid), {
+        displayName: data.user.displayName,
+        photoURL: data.user.photoURL,
+        uid: data.user.uid,
+        email: data.user.email,
+      })
+        .then((data) => console.log(data))
+        .catch((err) => {
+          console.log(err);
+        });
     });
   };
 
