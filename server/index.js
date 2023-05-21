@@ -1,6 +1,6 @@
 const app = require("express")();
 require("dotenv").config();
-const { admin } = require("./utils/adminConfig");
+const functions = require("firebase-functions");
 const cors = require("cors");
 
 app.use(cors());
@@ -14,3 +14,5 @@ app.get("/", (req, res) => {
 app.listen(process.env.PORT, () => {
   console.log("My server is Running");
 });
+
+exports.api = functions.https.onRequest(app);

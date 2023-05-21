@@ -1,0 +1,94 @@
+
+
+.group-list-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.group-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.group-item {
+  display: block;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.group-item button.join-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #2196f3;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.create-button {
+  display: block;
+  margin: 20px auto;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #2196f3;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-group-form {
+  max-width: 400px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.create-group-form h2 {
+  margin-top: 0;
+}
+
+.create-group-form input {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.create-group-form button {
+  padding: 8px 16px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #2196f3;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .group-list-container {
+    padding: 10px;
+  }
+}

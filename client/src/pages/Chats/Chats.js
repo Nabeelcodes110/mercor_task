@@ -30,7 +30,9 @@ const Chats = () => {
     where("__name__", "==", combinedID)
   );
   const docRef = doc(firestore, "Direct Messages", combinedID);
+  const [msgs] = useCollectionData(query);
 
+  //if No conversations are there then create a document in database
   useEffect(() => {
     getDoc(docRef)
       .then((data) => {
@@ -49,8 +51,7 @@ const Chats = () => {
       .catch((err) => console.log(err));
   });
 
-  const [msgs] = useCollectionData(query);
-
+  //adding message
   const handleFormSubmit = (event) => {
     event.preventDefault();
     if (inputValue.trim() !== "") {

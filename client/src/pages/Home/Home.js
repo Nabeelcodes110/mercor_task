@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   const [user] = useAuthState(auth);
 
+  //signIn / Login
   const handleLogin = () => {
     signInWithPopup(auth, provider).then((data) => {
       console.log("SignedIn");
@@ -29,7 +30,9 @@ const Home = () => {
             <Link to="/users">
               <button className="button">All Users</button>
             </Link>
-            <button className="button">Create/Join Rooms</button>
+            <Link to="/groups">
+              <button className="button">Create/Join Rooms</button>
+            </Link>
           </div>
           <br></br>
 
